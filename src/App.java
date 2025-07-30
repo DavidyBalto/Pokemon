@@ -146,7 +146,7 @@ public class App {
         String ataquesPokU1[][] = new String[MAX_POKEMONES*MAX_ATAQUES][ataques[0].length];
         String ataquesPokU2[][] = new String[MAX_POKEMONES*MAX_ATAQUES][ataques[0].length];
 
-        
+        /* 
         do{
         imprimirTablaDatos(pokemones);
         
@@ -223,7 +223,7 @@ public class App {
             break;
         }
         }while (opcUsuario != 6);
-            
+        */            
         
 
         
@@ -231,6 +231,7 @@ public class App {
         //Se van agregando segun pase el tiempo
         String objetosUsr1[][] = new String[3][objetos[0].length];
         String objetosUsr2[][] = new String[3][objetos[0].length];
+
 
             pokemonesRndm(objetosUsr1, objetos);
             pokemonesRndm(objetosUsr2, objetos);
@@ -463,8 +464,8 @@ public class App {
                 //Si el usuario 1 es mas veloz, se va a empezar con el usuario 1
                 validarEfectosEnJugador(efectosPokemonesUsr1,pokemonesU1);
                 pokActivoU1=validarVida(pokemonesUsuario1, pokemonesU1, pokActivoU1);
-                mostrarPokemon(pokemonesU1[pokActivoU1],ataquesPokAct1,pokemonesU2[pokActivoU2],turno,Jugador1);
                 do{
+                mostrarPokemon(pokemonesU1[pokActivoU1],ataquesPokAct1,pokemonesU2[pokActivoU2],turno,Jugador1);
                 eleccion=validarDato(1, MAX_ATAQUES+2, "Elija la accion a realizar:");
                 if(eleccion==5){
                     pokActivoU1=cambiarPokemon(pokemonesU1, pokActivoU1);//Cambio de pokemon
@@ -494,8 +495,8 @@ public class App {
                 validarEfectosEnJugador(efectosPokemonesUsr2,pokemonesU2);
                 pokActivoU2=validarVida(pokemonesUsuario2, pokemonesU2, pokActivoU2);
                 //Si el usuario 2 es mas veloz, se va a empezar con el usuario 2
-                mostrarPokemon(pokemonesU1[pokActivoU1],ataquesPokAct2,pokemonesU2[pokActivoU2],turno,Jugador2);
                 do{
+                mostrarPokemon(pokemonesU1[pokActivoU1],ataquesPokAct2,pokemonesU2[pokActivoU2],turno,Jugador2);
                 eleccion=validarDato(1, MAX_ATAQUES+2, "Elija la accion a realizar:");
                     if(eleccion==5){
                         pokActivoU2=cambiarPokemon(pokemonesU2, pokActivoU2);
@@ -657,7 +658,7 @@ public class App {
                   ||efectoObjeto.equals("Regeneracion")
                   ||efectoObjeto.equals("Defensa")) {
             for (int i = 0; i <efectosPkmnAtac[0].length;i+=3){
-                if (efectosPkmnAtac[pokemonActvivoAtac][i].equals(null)
+                if (efectosPkmnAtac[pokemonActvivoAtac][i]==null
                 || efectosPkmnAtac[pokemonActvivoAtac][i].equals(efectoObjeto)) {
                     efectosPkmnAtac[pokemonActvivoAtac][i] = efectoObjeto;
                     efectosPkmnAtac[pokemonActvivoAtac][i+1] = Integer.toString((int)valorEfectoObjeto);
@@ -668,7 +669,7 @@ public class App {
             usóObjeto = true;
         } else if (efectoObjeto.equals("Veneno")){
             for (int i = 0; i <efectosPkmnEnem[0].length;i++){
-                if (efectosPkmnEnem[pokemonActivoEnem][i].equals(null)
+                if (efectosPkmnEnem[pokemonActivoEnem][i]==null
                 || efectosPkmnEnem[pokemonActivoEnem][i].equals(efectoObjeto)) {
                     efectosPkmnEnem[pokemonActivoEnem][i] = Integer.toString((int)valorEfectoObjeto);
                     efectosPkmnEnem[pokemonActivoEnem][i+1] = Integer.toString(duracionTurnosEfecto);
@@ -680,15 +681,14 @@ public class App {
             if (pokemonesVivosAtac!=MAX_POKEMONES) {
                 p("Elija el pokemon a revivir:");
                 imprimirColumnaEnumerado(pokemonAtac, IDX_NOMBRE_POKEMON);
-                revivirEleccion=Integer.parseInt(sc.nextLine());
-                if(revivirEleccion<1||revivirEleccion>MAX_POKEMONES||!pokemonAtac[revivirEleccion-1][IDX_VIDA_POKEMON].equals("0")){
-                    p("No se pudo usar el objeto");
+                revivirEleccion=validarDato(1, MAX_POKEMONES, "Ingrese el pokemon la poscicion del pokemon a revivir: ");
+                if(!pokemonAtac[revivirEleccion-1][IDX_VIDA_POKEMON].equals("0")){
+                    p("No se pudo usar el objeto, el pokemon seleccionado aun tiene vida");
                 } else {
                     double temp = Double.parseDouble(pokemonAtac[revivirEleccion-1][IDX_VIDA_MAXIMA_POKEMON])*valorEfectoObjeto;
                     pokemonAtac[revivirEleccion-1][IDX_VIDA_POKEMON]=Integer.toString((int)temp);
                     usóObjeto = true;
                 }
-
             } else {
                 p("No tienes pokemones para revivir");
             }
@@ -711,6 +711,7 @@ public class App {
     public static void validarEfectosEnJugador(String[][] efectosPokemns,String[][]pokemnsUsr){
         for(int j = 0; j < efectosPokemns.length;j++){
             for(int i = 0; i < efectosPokemns[0].length;i+=3){
+                if(efectosPokemns[j][i]!=null){
                 if (efectosPokemns[j][i].equals("Veneno")){
                     if (efectosPokemns[j][i+2]=="0"){
                         efectosPokemns[j][i] = null;
@@ -770,7 +771,7 @@ public class App {
                         pokemnsUsr[j][IDX_ATAQUE_POKEMON]= Integer.toString(temp);
                     }
                 }
-
+                }
             }
         }
     }
