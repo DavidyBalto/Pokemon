@@ -1,3 +1,4 @@
+
 import java.util.Arrays;
 import java.util.Scanner;
 
@@ -412,7 +413,6 @@ public class App {
         }
 	}
 		
-	
 
         /**
      * Funcion de pelea entre 2 usuarios
@@ -456,14 +456,13 @@ public class App {
             };
         
             turno++;
-            //Ya ponlo donde necesites xd
-           
-
 
             if(jugador1) {
                 //Si el usuario 1 es mas veloz, se va a empezar con el usuario 1
-                validarEfectosEnJugador(efectosPokemonesUsr1,pokemonesU1);
+                validarEfectosEnJugador(efectosPokemonesUsr1[pokActivoU1],pokemonesU1[pokActivoU1], true);
                 pokActivoU1=validarVida(pokemonesUsuario1, pokemonesU1, pokActivoU1);
+                ataquesPokAct1[0]=ataquesPokU1[0+pokActivoU1*3];ataquesPokAct1[1]=ataquesPokU1[1+pokActivoU1*3];ataquesPokAct1[2]=ataquesPokU1[2+pokActivoU1*3];
+
                 do{
                 mostrarPokemon(pokemonesU1[pokActivoU1],ataquesPokAct1,pokemonesU2[pokActivoU2],turno,Jugador1);
                 eleccion=validarDato(1, MAX_ATAQUES+2, "Elija la accion a realizar:");
@@ -475,11 +474,14 @@ public class App {
                     if (objetosRestantesUsr1==0) {
                         p("No hay objetos disponibles para usar");
                     } else {
-                        p("Elija el objeto que quiere usar:");
+                        p("---Objetos Disponibles---");
                         imprimirObjetosEnumerado(objetosUsr1);
                         //Validacion eleccion entre 1 y objetosRestantes
                         eleccion=validarDato(1, objetosRestantesUsr1, "Elija el objeto que quiere usar:");
+                        p(Arrays.toString(pokemonesU1[pokActivoU1]));
                         usoObjeto = usarObjeto(eleccion,pokActivoU1,pokActivoU2,pokemonesU1,pokemonesU2,efectosPokemonesUsr1,efectosPokemonesUsr2,objetosUsr1,pokemonesUsuario1);
+                        validarEfectosEnJugador(efectosPokemonesUsr1[pokActivoU1], pokemonesU1[pokActivoU1], false);
+                        p(Arrays.toString(pokemonesU1[pokActivoU1]));
                     }
                     
                 } else{
@@ -492,8 +494,9 @@ public class App {
                 } 
                 }while(!ataco); ///Se repite en caso de no haber usado un ataque o cambiado de pokemon
             }else {
-                validarEfectosEnJugador(efectosPokemonesUsr2,pokemonesU2);
+                validarEfectosEnJugador(efectosPokemonesUsr2[pokActivoU2],pokemonesU2[pokActivoU2],true);
                 pokActivoU2=validarVida(pokemonesUsuario2, pokemonesU2, pokActivoU2);
+                ataquesPokAct2[0]=ataquesPokU2[0+pokActivoU2*3];ataquesPokAct2[1]=ataquesPokU2[1+pokActivoU2*3];ataquesPokAct2[2]=ataquesPokU2[2+pokActivoU2*3];
                 //Si el usuario 2 es mas veloz, se va a empezar con el usuario 2
                 do{
                 mostrarPokemon(pokemonesU1[pokActivoU1],ataquesPokAct2,pokemonesU2[pokActivoU2],turno,Jugador2);
@@ -510,8 +513,12 @@ public class App {
                         imprimirObjetosEnumerado(objetosUsr2);
                         //Validacion eleccion entre 1 y objetosRestantes
                         eleccion= validarDato(1, objetosRestantesUsr2, "Elija el objeto que quiere usar:");
+                        p(Arrays.toString(pokemonesU2[pokActivoU2]));
                         usoObjeto = usarObjeto(eleccion,pokActivoU2,pokActivoU1,pokemonesU2,pokemonesU1,efectosPokemonesUsr2,efectosPokemonesUsr1,objetosUsr2,pokemonesUsuario2);
+                        validarEfectosEnJugador(efectosPokemonesUsr2[pokActivoU2], pokemonesU2[pokActivoU2], false);
+                        p(Arrays.toString(pokemonesU2[pokActivoU2]));
                     }else p("Solo se puede usar un objeto por turno");
+                    
                 }else{
                     pokemonesU1[pokActivoU1][IDX_VIDA_POKEMON]=atacar(eleccion-1,pokemonesU2[pokActivoU2],ataquesPokAct2[eleccion-1],pokemonesU1[pokActivoU1]);
                     if(pokemonesU2[pokActivoU2][IDX_VIDA_POKEMON].equals("0" )&& pokemonesUsuario1>0){
@@ -566,10 +573,11 @@ public class App {
     public static String atacar(int eleccion, String[]pokemonAtacante, String[] ataquePokemon,String []pokemonAfectado) {
 
         int vidaPokemon = Integer.parseInt(pokemonAfectado[IDX_VIDA_POKEMON]);
+                int defensaPokemonA = Integer.parseInt(pokemonAfectado[IDX_DEFENSA_POKEMON]);
 
         int danioPokemon = Integer.parseInt(pokemonAtacante[IDX_ATAQUE_POKEMON]);
-        int defensaPokemonA = Integer.parseInt(pokemonAfectado[IDX_DEFENSA_POKEMON]);
         int danioHabilidad = Integer.parseInt(ataquePokemon[IDX_DANOS]);
+
         double ventajaAtaque = ventajaAtributo(ataquePokemon[IDX_ATRIBUTO_ATAQUE], pokemonAfectado[IDX_TIPO1_POKEMON],pokemonAfectado[IDX_TIPO2_POKEMON]);
 
         double danio = ((danioHabilidad*danioPokemon)/defensaPokemonA)*ventajaAtaque;
@@ -639,7 +647,7 @@ public class App {
         
         boolean usóObjeto = false;
         String efectoObjeto = objetosUsrAtac[eleccion-1][IDX_EFECTO_OBJETO];
-        double valorEfectoObjeto = Integer.parseInt(objetosUsrAtac[eleccion-1][IDX_VALOR_EFECTO_OBJETO]);
+        double valorEfectoObjeto = Double.parseDouble(objetosUsrAtac[eleccion-1][IDX_VALOR_EFECTO_OBJETO]);
         int cantidadObjetos = Integer.parseInt(objetosUsrAtac[eleccion-1][IDX_CANTIDAD_OBJETO]);
         int vidaPokemonAtacante = Integer.parseInt(pokemonAtac[pokemonActvivoAtac][IDX_VIDA_POKEMON]);
         int duracionTurnosEfecto = Integer.parseInt(objetosUsrAtac[eleccion-1][IDX_DURACION_EFECTO_OBJETO]);
@@ -651,8 +659,9 @@ public class App {
                 pokemonAtac[pokemonActvivoAtac][IDX_VIDA_POKEMON] = pokemonAtac[pokemonActvivoAtac][IDX_VIDA_MAXIMA_POKEMON];
             } else{
                 pokemonAtac[pokemonActvivoAtac][IDX_VIDA_POKEMON] = Integer.toString(vidaPokemonAtacante);
+                usóObjeto = true;
             }
-            usóObjeto = true;
+
 
         } else if (efectoObjeto.equals("Ataque")
                   ||efectoObjeto.equals("Regeneracion")
@@ -671,8 +680,9 @@ public class App {
             for (int i = 0; i <efectosPkmnEnem[0].length;i++){
                 if (efectosPkmnEnem[pokemonActivoEnem][i]==null
                 || efectosPkmnEnem[pokemonActivoEnem][i].equals(efectoObjeto)) {
-                    efectosPkmnEnem[pokemonActivoEnem][i] = Integer.toString((int)valorEfectoObjeto);
-                    efectosPkmnEnem[pokemonActivoEnem][i+1] = Integer.toString(duracionTurnosEfecto);
+                    efectosPkmnEnem[pokemonActivoEnem][i] = efectoObjeto;
+                    efectosPkmnEnem[pokemonActivoEnem][i+1] = Integer.toString((int)valorEfectoObjeto);
+                    efectosPkmnEnem[pokemonActivoEnem][i+2] = Integer.toString(duracionTurnosEfecto);
                     break;
                 }
             }
@@ -708,69 +718,68 @@ public class App {
         return usóObjeto;
     };
 
-    public static void validarEfectosEnJugador(String[][] efectosPokemns,String[][]pokemnsUsr){
-        for(int j = 0; j < efectosPokemns.length;j++){
-            for(int i = 0; i < efectosPokemns[0].length;i+=3){
-                if(efectosPokemns[j][i]!=null){
-                if (efectosPokemns[j][i].equals("Veneno")){
-                    if (efectosPokemns[j][i+2]=="0"){
-                        efectosPokemns[j][i] = null;
-                        efectosPokemns[j][i+1] = null;
-                        efectosPokemns[j][i+2] = null;
-                    } else{
-                        int temp = Integer.parseInt(pokemnsUsr[j][IDX_VIDA_POKEMON]);
-                    temp -= Integer.parseInt(efectosPokemns[j][i+1]);
-                    pokemnsUsr[j][IDX_VIDA_POKEMON]= Integer.toString(temp);
-                    
-                    //Elimina 1 a los turnos restantes de la duracion
-                    efectosPokemns[j][i+2]=Integer.toString(Integer.parseInt(efectosPokemns[j][i+2])-1);
-                    }
-                    
+    public static void validarEfectosEnJugador(String[] efectosPokemns,String[]pokemnsUsr, boolean validar){
+  
+            for(int i = 0; i < efectosPokemns.length;i+=3){
+                if(efectosPokemns[i]!=null){
+                if (efectosPokemns[i].equals("Veneno")){
+                    if (efectosPokemns[i+2]=="0"){
+                        efectosPokemns[i] = null;
+                        efectosPokemns[i+1] = null;
+                        efectosPokemns[i+2] = null;
+                    } else if(validar){
+                        int temp = Integer.parseInt(pokemnsUsr[IDX_VIDA_POKEMON]);
+                        temp -= Integer.parseInt(efectosPokemns[i+1]);
+                        pokemnsUsr[IDX_VIDA_POKEMON]= Integer.toString(temp); 
+                        //Elimina 1 a los turnos restantes de la duracion
+                        efectosPokemns[i+2]=Integer.toString(Integer.parseInt(efectosPokemns[i+2])-1);
+                        p(pokemnsUsr[IDX_NOMBRE_POKEMON]+" recibe "+ efectosPokemns[i+1]+" PS de danio por veneno");
+                    }                    
 
-                } else if (efectosPokemns[j][i].equals("Defensa")){
-                    int temp = Integer.parseInt(pokemnsUsr[j][IDX_DEFENSA_POKEMON]);
-                    if (efectosPokemns[j][i+2]=="0") {
-                        efectosPokemns[j][i] = null;
-                        efectosPokemns[j][i+1] = null;
-                        efectosPokemns[j][i+2] = null;
-                        temp-=Integer.parseInt(pokemnsUsr[j][IDX_DEFENSA_POKEMON]);
-                        pokemnsUsr[j][IDX_DEFENSA_POKEMON]= Integer.toString(temp);
-                    } else if (Integer.parseInt(efectosPokemns[j][i+2])<0) {
-                        int duracionAux = Integer.parseInt(efectosPokemns[j][i+2]) + 1;
-                        efectosPokemns[j][i+2] = Integer.toString(duracionAux);
+                } else if (efectosPokemns[i].equals("Defensa")){
+                    int temp = Integer.parseInt(pokemnsUsr[IDX_DEFENSA_POKEMON]);
+                    if (efectosPokemns[i+2]=="0") {
+                        efectosPokemns[i] = null;
+                        efectosPokemns[i+1] = null;
+                        efectosPokemns[i+2] = null;
+                        temp-=Integer.parseInt(pokemnsUsr[IDX_DEFENSA_POKEMON]);
+                        pokemnsUsr[IDX_DEFENSA_POKEMON]= Integer.toString(temp);
+                    } else if (Integer.parseInt(efectosPokemns[i+2])<0 && validar) {
+                        int duracionAux = Integer.parseInt(efectosPokemns[i+2]) + 1;
+                        efectosPokemns[i+2] = Integer.toString(duracionAux);
                     } else {
-                        temp+=Integer.parseInt(efectosPokemns[j][i+1]);
-                        pokemnsUsr[j][IDX_DEFENSA_POKEMON]= Integer.toString(temp);
+                        temp+=Integer.parseInt(efectosPokemns[i+1]);
+                        pokemnsUsr[IDX_DEFENSA_POKEMON]= Integer.toString(temp);
                     }
-                } else if (efectosPokemns[j][i].equals("Regeneracion")){
-                    if (efectosPokemns[j][i+2]=="0"){
-                        efectosPokemns[j][i] = null;
-                        efectosPokemns[j][i+1] = null;
-                        efectosPokemns[j][i+2] = null;
-                    } else{
-                        int temp = Integer.parseInt(pokemnsUsr[j][IDX_VIDA_POKEMON]);
-                    temp += Integer.parseInt(efectosPokemns[j][i+1]);
-                    pokemnsUsr[j][IDX_VIDA_POKEMON]= Integer.toString(temp);
+                } else if (efectosPokemns[i].equals("Regeneracion")){
+                    if (efectosPokemns[i+2]=="1"){
+                        efectosPokemns[i] = null;
+                        efectosPokemns[i+1] = null;
+                        efectosPokemns[i+2] = null;
+                    } else if(validar){
+                        int temp = Integer.parseInt(pokemnsUsr[IDX_VIDA_POKEMON]);
+                        p(pokemnsUsr[IDX_NOMBRE_POKEMON]+" se cura "+ efectosPokemns[i+1]+" PS por Regeneracion");
+                        temp += Integer.parseInt(efectosPokemns[i+1]);
+                        pokemnsUsr[IDX_VIDA_POKEMON]= Integer.toString(temp);
                     
                     //Elimina 1 a los turnos restantes de la duracion
-                    efectosPokemns[j][i+2]=Integer.toString(Integer.parseInt(efectosPokemns[j][i+2])-1);
+                    efectosPokemns[i+2]=Integer.toString(Integer.parseInt(efectosPokemns[i+2])-1);
                     }
-                } else if (efectosPokemns[j][i].equals("Ataque")){
-                    int temp = Integer.parseInt(pokemnsUsr[j][IDX_ATAQUE_POKEMON]);
-                    if (efectosPokemns[j][i+2]=="0") {
-                        efectosPokemns[j][i] = null;
-                        efectosPokemns[j][i+1] = null;
-                        efectosPokemns[j][i+2] = null;
-                        temp-=Integer.parseInt(pokemnsUsr[j][IDX_ATAQUE_POKEMON]);
-                        pokemnsUsr[j][IDX_ATAQUE_POKEMON]= Integer.toString(temp);
-                    } else if (Integer.parseInt(efectosPokemns[j][i+2])<0) {
-                        int duracionAux = Integer.parseInt(efectosPokemns[j][i+2]) + 1;
-                        efectosPokemns[j][i+2] = Integer.toString(duracionAux);
+                } else if (efectosPokemns[i].equals("Ataque")){
+                    int temp = Integer.parseInt(pokemnsUsr[IDX_ATAQUE_POKEMON]);
+                    if (efectosPokemns[i+2]=="0") {
+                        efectosPokemns[i] = null;
+                        efectosPokemns[i+1] = null;
+                        efectosPokemns[i+2] = null;
+                        temp-=Integer.parseInt(pokemnsUsr[IDX_ATAQUE_POKEMON]);
+                        pokemnsUsr[IDX_ATAQUE_POKEMON]= Integer.toString(temp);
+                    } else if (Integer.parseInt(efectosPokemns[i+2])<0 && validar) {
+                        int duracionAux = Integer.parseInt(efectosPokemns[i+2]) + 1;
+                        efectosPokemns[i+2] = Integer.toString(duracionAux);
                     } else {
-                        temp+=Integer.parseInt(efectosPokemns[j][i+1]);
-                        pokemnsUsr[j][IDX_ATAQUE_POKEMON]= Integer.toString(temp);
+                        temp+=Integer.parseInt(efectosPokemns[i+1]);
+                        pokemnsUsr[IDX_ATAQUE_POKEMON]= Integer.toString(temp);
                     }
-                }
                 }
             }
         }
@@ -801,7 +810,7 @@ public class App {
 
         for(int i =0; i < objetosUsr.length; i++) {
             if(!objetosUsr[i][IDX_CANTIDAD_OBJETO].equals("0")) {
-                p((i+1) + ". " + objetosUsr[i][IDX_NOMBRE_OBJETO]);
+                p((i+1) + ". " + objetosUsr[i][IDX_NOMBRE_OBJETO]+ " (" + objetosUsr[i][IDX_CANTIDAD_OBJETO]+")");
             }
                 
             } 
@@ -816,8 +825,9 @@ public class App {
     public static int validarVida(int pokemonesRestantes, String[][] pokemonesUsr, int pokemonAct){
         int nuevoPok=pokemonAct;
         if(Integer.parseInt(pokemonesUsr[pokemonAct][IDX_VIDA_POKEMON])<=0){
-        do {
             p(pokemonesUsr[pokemonAct][IDX_NOMBRE_POKEMON]+" ya no puede continuar");
+            
+        do {
             nuevoPok=validarDato(1, MAX_POKEMONES, "Ingrese el pokemon que quiere usar:");
             if(Integer.parseInt(pokemonesUsr[nuevoPok-1][IDX_VIDA_POKEMON])<=0){
                 pokemonesUsr[nuevoPok-1][IDX_VIDA_POKEMON]="0";
@@ -829,6 +839,5 @@ public class App {
         }
         return nuevoPok;//Indice del pokemon seleccionado
     }
-
 
 }
