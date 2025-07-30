@@ -146,16 +146,14 @@ public class App {
         String ataquesPokU1[][] = new String[MAX_POKEMONES*MAX_ATAQUES][ataques[0].length];
         String ataquesPokU2[][] = new String[MAX_POKEMONES*MAX_ATAQUES][ataques[0].length];
 
-        /* 
-        do{
-        imprimirTablaDatos(pokemones);
         
-        imprimirMenuOpciones();
+        do{
+        
+        imprimirMenuGeneral();
+
 
         opcUsuario = sc.nextInt();
-        sc.nextLine();
 
-        String [] [] copiaPokemones = copiarMatriz(pokemones);
         switch (opcUsuario){
             case 1:
             System.out.println("\nUsted ha seleccionado ordenar alfabéticamente");
@@ -165,20 +163,20 @@ public class App {
             switch (opcOrdenamiento) {
                 case 1:
                     System.out.println("\nUsted ha seleccionado ordenar por BubbleSort");
-                    String [] [] matOrdenAlfabeticoUno = ordenarBurbuja(copiaPokemones, pos);
+                    String [] [] matOrdenAlfabeticoUno = ordenarBurbuja(pokemones, pos);
                     System.out.println("\nPokemones ordenados alfabéticamente: ");
                     imprimirTablaDatos(matOrdenAlfabeticoUno);
                     break;
                 case 2:
                     System.out.println("\nUsted ha seleccionado ordenar por Selección");
-                    String [] [] matOrdenAlfabeticoDos = ordenarSeleccion(copiaPokemones, pos);
+                    String [] [] matOrdenAlfabeticoDos = ordenarSeleccion(pokemones, pos);
                     System.out.println("\nPokemones ordenados alfabéticamente: ");
                     imprimirTablaDatos(matOrdenAlfabeticoDos);
                     break;
                 case 3:
                     System.out.println("\nUsted ha seleccionado ordenar por Quicksort");
-                    int inicio = 0, fin = copiaPokemones.length - 1;
-                    String [] [] matOrdenAlfabeticoTres = ordenarQuicksort(copiaPokemones, inicio, fin, pos);
+                    int inicio = 0, fin = pokemones.length - 1;
+                    String [] [] matOrdenAlfabeticoTres = ordenarQuicksort(pokemones, inicio, fin, pos);
                     imprimirTablaDatos(matOrdenAlfabeticoTres);
                     break;
                 case 4:
@@ -197,20 +195,20 @@ public class App {
             switch (opcOrdenamiento) {
                 case 1:
                     System.out.println("\nUsted ha seleccionado ordenar por BubbleSort");
-                    String [] [] matOrdenTipoUno = ordenarBurbuja(copiaPokemones, pos);
+                    String [] [] matOrdenTipoUno = ordenarBurbuja(pokemones, pos);
                     System.out.println("\nPokemones ordenados alfabéticamente: ");
                     imprimirTablaDatos(matOrdenTipoUno);
                     break;
                 case 2:
                     System.out.println("\nUsted ha seleccionado ordenar por Selección");
-                    String [] [] matOrdenTipoDos = ordenarSeleccion(copiaPokemones, pos);
+                    String [] [] matOrdenTipoDos = ordenarSeleccion(pokemones, pos);
                     System.out.println("\nPokemones ordenados alfabéticamente: ");
                     imprimirTablaDatos(matOrdenTipoDos);
                     break;
                 case 3:
                     System.out.println("\nUsted ha seleccionado ordenar por Quicksort");
-                    int inicio = 0, fin = copiaPokemones.length - 1;
-                    String [] [] matOrdenTipoTres = ordenarQuicksort(copiaPokemones, inicio, fin, pos);
+                    int inicio = 0, fin = pokemones.length - 1;
+                    String [] [] matOrdenTipoTres = ordenarQuicksort(pokemones, inicio, fin, pos);
                     imprimirTablaDatos(matOrdenTipoTres);
                     break;
                 case 4:
@@ -223,7 +221,7 @@ public class App {
             break;
         }
         }while (opcUsuario != 6);
-        */            
+               
         
 
         
@@ -389,16 +387,7 @@ public class App {
             
     }
 
-    public static void imprimirMenuOpciones() {
-		System.out.println("=================== MENU DE OPERACIONES ===================");
-		System.out.println("1.- Ordenar en orden alfabético");
-		System.out.println("2.- Ordenar los pokemons por tipo");
-		System.out.println("3.- Ordenar los pokémons por ataque");
-		System.out.println("4.- Ordenar los pokémons por defensa");
-		System.out.println("5.- Ordenar los pokémons por velocidad");
-		System.out.println("6.- Salir");
-		System.out.print("Seleccione una opción: ");
-	}
+    
 
 
 	public static void imprimirTablaDatos(String[] [] copiaMatriz) {
@@ -830,5 +819,25 @@ public class App {
         return nuevoPok;//Indice del pokemon seleccionado
     }
 
+    public static void imprimirMenuOpciones() {
+		System.out.println("=================== MENU DE OPERACIONES ===================");
+		System.out.println("1.- Ordenar en orden alfabético");
+		System.out.println("2.- Ordenar los pokemons por tipo");
+		System.out.println("3.- Ordenar los pokémons por ataque");
+		System.out.println("4.- Ordenar los pokémons por defensa");
+		System.out.println("5.- Ordenar los pokémons por velocidad");
+		System.out.println("6.- Salir");
+		System.out.print("Seleccione una opción: ");
+	}
+
+    public static void imprimirMenuGeneral() {
+		System.out.println("=================== MENU ===================");
+		System.out.println("1.- Ver información de todos los Pokemones");
+		System.out.println("2.- Ver información de todos los objetos");
+		System.out.println("3.- Elegir equipamiento Jugador 1");
+		System.out.println("4.- Elegir equipamiento Jugador 2");
+		System.out.println("5.- Jugar");
+		System.out.print("Seleccione una opción: ");
+	}
 
 }
